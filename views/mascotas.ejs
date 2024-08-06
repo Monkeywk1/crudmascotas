@@ -1,6 +1,9 @@
 <%- include('template/header', {tituloWeb: "Página de Servicios"}); %>
 
 <div class="container">
+  <h1>CRUD con MongoDB</h1>
+  <a href="mascotas/crear" class="btn btn-success">Agregar Mascota</a>
+
     <% if (arrayMascotas.length > 0) { %>
         <table class="table">
             <thead>
@@ -17,7 +20,9 @@
                         <th scope="row"><%= mascota.id %> </th>
                         <td><%= mascota.nombre %></td>
                         <td><%= mascota.descripcion %></td>
-                        <td>Acción</td>
+                        <td>
+                          <a href="mascotas/<%= mascota.id %>" class="btn btn-warning btn-sm">Editar</a>
+                        </td>
                       </tr>
                  
                 <% }) %>
