@@ -1,21 +1,21 @@
 const express = require('express')
 const router = express.Router();
 
-const Mascota = require('../models/mascota');
+const Servicio = require('../models/servicio');
 
 router.get('/', async (req, res)=>{
 try {
-    const arrayMascotas = await Mascota.find();
+    const arrayServicios = await Servicio.find();
 //    console.log(arrayMascotas)
-    res.render("mascotas",{arrayMascotas})
+    res.render("servicios",{arrayServicios})
 } catch (error) {
     console.log(error)
 }
 
 });
 
-router.get('/crear', (req, res)=>{
-        res.render('crear');
+router.get('/crearserv', (req, res)=>{
+        res.render('crearserv');
 });
 
 /*router para recibir datos del formulario crear */
@@ -23,8 +23,8 @@ router.post('/', async (req, res)=>{
     const body = req.body;
 //    console.log(body);
     try {
-        await Mascota.create(body)
-        res.redirect('/mascotas')
+        await Servicio.create(body)
+        res.redirect('/servicios')
     } catch (error){
         console.log('error:', error)
     }
@@ -33,10 +33,10 @@ router.post('/', async (req, res)=>{
 router.get("/:id", async (req, res)=>{
     const id = req.params.id;
     try {
-        const mascotaBD = await Mascota.findOne({_id: id})
+        const servicioBD = await Servicio.findOne({_id: id})
         //console.log(mascotaDB)
         res.render('detalle',{
-            mascota: mascotaBD,
+            servicio: servicioBD,
             error: false
         })
     } catch (error){
@@ -51,8 +51,8 @@ router.get("/:id", async (req, res)=>{
 router.delete("/:id", async (req, res)=>{
     const id = req.params.id;
     try {
-        const mascotaDB = await Mascota.findByIdAndDelete({_id: id})
-        if (!mascotaDB) {
+        const servicioDB = await Servicio.findByIdAndDelete({_id: id})
+        if (!servicioDB) {
             res.json({
                 estado: false,
                 mensaje: "No fue posible eliminar el registro"
@@ -76,12 +76,12 @@ router.put('/:id', async(req, res) => {
    const body = req.body;
    //console.log(body);
    try {
-    const mascotaDB = await Mascota.findByIdAndUpdate(
+    const servicioDB = await Servicio.findByIdAndUpdate(
         id, body, {useFindAndModify: false}
     )
     res.json({
         estado: true,
-        mensaje: 'Mascota Editada'
+        mensaje: 'Servicio Editado'
     })
    } catch (error) {
     console.log(error);
