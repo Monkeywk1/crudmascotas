@@ -13,7 +13,7 @@ try {
 }
 
 });
-
+//ruta del boton crear
 router.get('/crearserv', (req, res)=>{
         res.render('crearserv');
 });
