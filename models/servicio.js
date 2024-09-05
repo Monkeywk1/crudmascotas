@@ -7,5 +7,5 @@ const servicioSchema = new schema({
 })
 
 /*creacion del modelo */
-const Servicio = mongoose.model('servicio', servicioSchema);
-module.exports = Servicio;
+const servicio = mongoose.model('servicio', servicioSchema);
+module.exports = servicio;

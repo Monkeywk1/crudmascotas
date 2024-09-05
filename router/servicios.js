@@ -1,94 +1,88 @@
-const express = require('express')
+const express = require('express');
 const router = express.Router();
 
-const Servicio = require('../models/servicio');
+const servicio = require('../models/servicio');
 
-router.get('/', async (req, res)=>{
-try {
-    const arrayServicios = await Servicio.find();
-//    console.log(arrayMascotas)
-    res.render("servicios",{arrayServicios})
-} catch (error) {
-    console.log(error)
-}
-
-});
-//ruta del boton crear
-router.get('/crearserv', (req, res)=>{
-        res.render('crearserv');
-});
-
-/*router para recibir datos del formulario crear */
-router.post('/', async (req, res)=>{
-    const body = req.body;
-//    console.log(body);
+router.get('/', async (req, res) => {
     try {
-        await Servicio.create(body)
-        res.redirect('/servicios')
-    } catch (error){
-        console.log('error:', error)
+        const arrayServicios = await servicio.find();
+        //console.log(arrayServicios)
+        res.render("servicios", {arrayServicios})
+    } catch (error) {
+        console.log(error)
     }
-});
-/*router para editar un documento */
-router.get("/:id", async (req, res)=>{
+})
+
+router.get('/crearserv', (req, res) => {
+    res.render('crearserv');
+})
+
+router.post('/', async (req, res) => {
+    const body = req.body;
+    try{
+        await servicio.create(body)
+        res.redirect('/servicios')
+    }catch(error){
+        console.log("error", error)
+    }
+})
+
+router.get('/:id', async (req, res) => {
     const id = req.params.id;
-    try {
-        const servicioBD = await Servicio.findOne({_id: id})
-        //console.log(mascotaDB)
-        res.render('detalle',{
-            servicio: servicioBD,
+    try{
+        const servicioDB = await servicio.findOne({_id: id})
+        //console.log(servicioDB)
+        res.render('detalleserv',{
+            servicio: servicioDB,
             error: false
         })
-    } catch (error){
-        console.log('error:', error)
+    }catch(error){
+        console.log("error", error)
         res.render('detalle',{
             error: true,
-            mensaje: "No se encontro ningún registro qué conincida con el id"
+            mensaje: 'no se encontró ningún registro que conincida con el id'
         })
     }
-});
-/*router para borrar un documento */
-router.delete("/:id", async (req, res)=>{
+})
+
+router.delete('/:id', async (req, res) => {
     const id = req.params.id;
-    try {
-        const servicioDB = await Servicio.findByIdAndDelete({_id: id})
+    try{
+        const servicioDB = await servicio.findByIdAndDelete({_id: id})
         if (!servicioDB) {
             res.json({
                 estado: false,
-                mensaje: "No fue posible eliminar el registro"
+                mensaje: "No fue posible elimiar el registro"
             })
         } else {
             res.json({
                 estado: true,
-                mensaje: "Registro Eliminado!!!"
-        })
+                mensaje: "Registro eliminado"
+                })
         }
-        
-    } catch (error){
-        console.log('error:', error)
-        
+    }catch(error){
+        console.log("error", error)   
+    }
+})
+
+router.put('/:id', async(req, res)=>{
+    const id = req.params.id;
+    const body = req.body;
+    try {
+        const servicioDB = await servicio.findByIdAndUpdate(
+            id, body, {useFindAndModify: false}
+        )
+        res.json({
+            estado: true,
+            mensaje: 'Servicio editado'
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            estado: false,
+            mensaje: 'Edicion fallida'
+        })
     }
 });
 
-/*router para la acutalizacion */
-router.put('/:id', async(req, res) => {
-   const id = req.params.id;
-   const body = req.body;
-   //console.log(body);
-   try {
-    const servicioDB = await Servicio.findByIdAndUpdate(
-        id, body, {useFindAndModify: false}
-    )
-    res.json({
-        estado: true,
-        mensaje: 'Servicio Editado'
-    })
-   } catch (error) {
-    console.log(error);
-    res.json({
-        estado: false,
-        mensaje: 'Edicion Fallida'
-    })
-   } 
-});
 module.exports = router;
